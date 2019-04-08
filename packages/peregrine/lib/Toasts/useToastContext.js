@@ -60,7 +60,8 @@ const reducer = (prevState = initialState, action = {}) => {
     }
 };
 
-const ToastContext = createContext();
+const ToastContext =
+    window.__ToastContext || (window.__ToastContext = createContext());
 
 const wrappedReducer = withLogger(reducer);
 

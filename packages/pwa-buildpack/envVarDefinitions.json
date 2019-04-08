@@ -124,7 +124,7 @@
                     "name": "UPWARD_JS_UPWARD_PATH",
                     "type": "str",
                     "desc": "UPWARD configuration file to use for the PWADevServer and the \"stage:venia\" sample server.",
-                    "default": "upward.yml"
+                    "default": "dist/upward.yml"
                 },
                 {
                     "name": "UPWARD_JS_BIND_LOCAL",
@@ -148,6 +148,17 @@
                     "type": "str",
                     "desc": "Specify a Braintree API token token to direct the Venia storefront to communicate with your Braintree instance. You can find this value in Braintree's Control Panel under Settings > API Keys > Tokenization Keys.",
                     "default": "sandbox_8yrzsvtm_s2bg8fs563crhqzk"
+                }
+            ]
+        },
+        {
+            "name": "Developer settings",
+            "variables": [
+                {
+                    "name": "DEVELOPER_DEBUG_BUNDLES",
+                    "type": "bool",
+                    "desc": "Build developer-mode bundles without adding hot reloading or launching the dev server. Disables minification and enables all Webpack debug settings for maximum code readability.",
+                    "default": false
                 }
             ]
         }
