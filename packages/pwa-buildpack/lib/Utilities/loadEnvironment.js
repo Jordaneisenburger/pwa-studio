@@ -102,7 +102,7 @@ function throwReport({ errors }) {
  */
 class Configuration {
     constructor(env, envFilePresent) {
-        this.env = env;
+        this.env = Object.assign({}, env);
         this.envFilePresent = envFilePresent;
         this.isProd = env.isProd;
         this.isProduction = env.isProduction;

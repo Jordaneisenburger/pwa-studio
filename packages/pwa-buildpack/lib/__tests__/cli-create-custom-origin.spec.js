@@ -15,7 +15,6 @@ beforeEach(() => {
     }));
     jest.spyOn(console, 'warn').mockImplementation(() => {});
     jest.spyOn(console, 'error').mockImplementation(() => {});
-    jest.spyOn(process, 'chdir').mockImplementation(() => {});
     jest.spyOn(process, 'exit').mockImplementation(() => {});
 });
 afterEach(() => {
@@ -33,21 +32,19 @@ test('is a yargs builder', () => {
 test('runs configureHost from environment settings in passed directory', async () => {
     loadEnvironment.mockReturnValueOnce({
         section: () => ({
-            exactDomain: 'fake.domain'
+            exactDomain: 'fake.domain',
+            enabled: true
         })
     });
 
     await createCustomOriginBuilder.handler({ directory: process.cwd() });
-    expect(process.chdir).not.toHaveBeenCalled();
     expect(loadEnvironment).toHaveBeenCalledWith(process.cwd());
     expect(configureHost).toHaveBeenCalledWith(
+        process.cwd(),
         expect.objectContaining({
             interactive: true,
             exactDomain: 'fake.domain'
         })
-    );
-    expect(console.warn).toHaveBeenCalledWith(
-        expect.stringMatching('cert for https://fake.domain')
     );
 });
 
@@ -59,14 +56,9 @@ test('changes to passed directory to run configureHost', async () => {
     });
 
     await createCustomOriginBuilder.handler({ directory: 'path/to/elsewhere' });
-    expect(process.chdir).toHaveBeenNthCalledWith(
-        1,
-        expect.stringMatching(/path\/to\/elsewhere$/)
-    );
     expect(loadEnvironment).toHaveBeenCalledWith(
-        process.chdir.mock.calls[0][0]
+        expect.stringContaining('path/to/elsewhere')
     );
-    expect(process.chdir).toHaveBeenNthCalledWith(2, process.cwd());
 });
 
 test('errors out if environment is invalid', async () => {

@@ -4,6 +4,8 @@ const upward = require('@magento/upward-js');
 const fetch = require('node-fetch');
 const UpwardDevServerPlugin = require('../UpwardDevServerPlugin');
 
+const mockContext = require('path').resolve(__dirname, '../../../../../../');
+
 test('creates a devServer.after function if it does not exist', () => {
     const devServer = {};
     const app = {
@@ -127,6 +129,7 @@ test('supplies a dev-mode IOAdapter with webpack fs integration', async () => {
     const devServer = {};
     const compiler = {
         options: {
+            context: mockContext,
             output: {
                 path: '/'
             }
@@ -175,11 +178,11 @@ test('supplies a dev-mode IOAdapter with webpack fs integration', async () => {
     expect(fromDefaultFileSystem).toBe('from default filesystem');
     expect(compiler.outputFileSystem.readFileSync).toHaveBeenCalledWith(
         expect.stringMatching(/bFile$/),
-        undefined
+        'utf8'
     );
     expect(defaultIO.readFile).toHaveBeenCalledWith(
         expect.stringMatching(/bFile$/),
-        undefined
+        'utf8'
     );
 
     compiler.outputFileSystem.readFileSync.mockImplementationOnce(() => {
@@ -195,15 +198,15 @@ test('supplies a dev-mode IOAdapter with webpack fs integration', async () => {
     expect(fromInputFileSystem).toBe('from input file system');
     expect(compiler.outputFileSystem.readFileSync).toHaveBeenCalledWith(
         expect.stringMatching(/cFile$/),
-        undefined
+        'utf8'
     );
     expect(defaultIO.readFile).toHaveBeenCalledWith(
         expect.stringMatching(/cFile$/),
-        undefined
+        'utf8'
     );
     expect(compiler.inputFileSystem.readFileSync).toHaveBeenCalledWith(
         expect.stringMatching(/cFile$/),
-        undefined
+        'utf8'
     );
 });
 
