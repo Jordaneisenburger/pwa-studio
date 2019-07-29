@@ -120,7 +120,7 @@ async function configureWebpack({ context, vendor = [], special = {}, env }) {
             rules: [
                 {
                     test: /\.graphql$/,
-                    include: hasFlag('graphQLQueries'),
+                    include: [paths.src, ...hasFlag('graphQLQueries')],
                     use: [
                         {
                             loader: 'graphql-tag/loader'
@@ -190,7 +190,10 @@ async function configureWebpack({ context, vendor = [], special = {}, env }) {
         }),
         plugins: [
             new RootComponentsPlugin({
-                rootComponentsDirs: hasFlag('rootComponents').reduce(
+                rootComponentsDirs: [
+                    ...hasFlag('rootComponents'),
+                    context
+                ].reduce(
                     (searchPaths, moduleDir) => [
                         ...searchPaths,
                         path.join(moduleDir, 'RootComponents'),
